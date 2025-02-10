@@ -8,32 +8,31 @@
 
 # cython: language_level=3, boundscheck=False
 
-import numpy as np
 cimport numpy as np
 
 
-cdef inline np.float32 max(np.float32 a, np.float32 b):
+cdef inline float max(float a, float b):
     return a if a >= b else b
 
-cdef inline np.float32 min(np.float32 a, np.float32 b):
+cdef inline float min(float a, float b):
     return a if a <= b else b
 
 
 def soft_nms_cpu(
-    np.ndarray[np.float32, ndim=2] boxes_in,
-    np.float32 iou_thr,
+    np.ndarray[float, ndim=2] boxes_in,
+    float iou_thr,
     unsigned int method=1,
-    np.float32 sigma=0.5,
-    np.float32 min_score=0.001,
+    float sigma=0.5,
+    float min_score=0.001,
 ):
     boxes = boxes_in.copy()
     cdef int N = boxes.shape[0]
-    cdef np.float32 iw, ih, box_area
-    cdef np.float32 ua
+    cdef float iw, ih, box_area
+    cdef float ua
     cdef int pos = 0
-    cdef np.float32 maxscore = 0
+    cdef float maxscore = 0
     cdef int maxpos = 0
-    cdef np.float32 x1, x2, y1, y2, tx1, tx2, ty1, ty2, ts, area, weight, ov
+    cdef float x1, x2, y1, y2, tx1, tx2, ty1, ty2, ts, area, weight, ov
     inds = np.arange(N)
 
     for i in range(N):
