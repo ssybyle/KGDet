@@ -79,11 +79,11 @@ at::Tensor nms_cuda(const at::Tensor boxes, float nms_overlap_thresh) {
 
   at::cuda::getCurrentCUDAStream(); // TODO replace with getTHCState
 
-  unsigned long long* mask_dev = NULL;
+  unsigned long long* mask_dev = nullptr;
   //THCudaCheck(THCudaMalloc(state, (void**) &mask_dev,
   //                      boxes_num * col_blocks * sizeof(unsigned long long)));
 
-  mask_dev = at::cuda::malloc<unsigned long long>(boxes_num * col_blocks);
+  cudaMalloc((void**)&mask_dev, boxes_num * col_blocks * sizeof(unsigned long long));
 
   dim3 blocks((boxes_num + threadsPerBlock - 1) / threadsPerBlock, 
               (boxes_num + threadsPerBlock - 1) / threadsPerBlock);
