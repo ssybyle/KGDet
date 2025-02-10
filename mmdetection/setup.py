@@ -1,12 +1,11 @@
 import os
-import platform
 import subprocess
 import time
 from setuptools import Extension, find_packages, setup
+from torch.utils.cpp_extension import BuildExtension, CUDAExtension
 
 import numpy as np
 from Cython.Build import cythonize
-from torch.utils.cpp_extension import BuildExtension, CUDAExtension
 
 
 def readme():
@@ -19,7 +18,7 @@ MAJOR = 1
 MINOR = 0
 PATCH = ''
 SUFFIX = 'rc0'
-SHORT_VERSION = '{}.{}.{}{}'.format(MAJOR, MINOR, PATCH, SUFFIX)
+SHORT_VERSION = f'{MAJOR}.{MINOR}.{PATCH}{SUFFIX}'
 
 version_file = 'mmdet/version.py'
 
@@ -88,7 +87,7 @@ def get_version():
 def make_cuda_ext(name, module, sources):
 
     return CUDAExtension(
-        name='{}.{}'.format(module, name),
+        name=f'{module}.{name}',
         sources=[os.path.join(*module.split('.'), p) for p in sources],
         extra_compile_args={
             'cxx': [],
@@ -102,13 +101,13 @@ def make_cuda_ext(name, module, sources):
 
 def make_cython_ext(name, module, sources):
     extra_compile_args = None
-    if platform.system() != 'Windows':
+    if os.name != 'nt':
         extra_compile_args = {
             'cxx': ['-Wno-unused-function', '-Wno-write-strings']
         }
 
     extension = Extension(
-        '{}.{}'.format(module, name),
+        f'{module}.{name}',
         [os.path.join(*module.split('.'), p) for p in sources],
         include_dirs=[np.get_include()],
         language='c++',
