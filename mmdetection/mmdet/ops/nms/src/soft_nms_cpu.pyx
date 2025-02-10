@@ -8,6 +8,7 @@
 
 # cython: language_level=3, boundscheck=False
 
+import numpy as np
 cimport numpy as np
 
 
