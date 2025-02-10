@@ -12,28 +12,28 @@ import numpy as np
 cimport numpy as np
 
 
-cdef inline np.float32_t max(np.float32_t a, np.float32_t b):
+cdef inline np.float32 max(np.float32 a, np.float32 b):
     return a if a >= b else b
 
-cdef inline np.float32_t min(np.float32_t a, np.float32_t b):
+cdef inline np.float32 min(np.float32 a, np.float32 b):
     return a if a <= b else b
 
 
 def soft_nms_cpu(
-    np.ndarray[float, ndim=2] boxes_in,
-    float iou_thr,
+    np.ndarray[np.float32, ndim=2] boxes_in,
+    np.float32 iou_thr,
     unsigned int method=1,
-    float sigma=0.5,
-    float min_score=0.001,
+    np.float32 sigma=0.5,
+    np.float32 min_score=0.001,
 ):
     boxes = boxes_in.copy()
     cdef int N = boxes.shape[0]
-    cdef float iw, ih, box_area
-    cdef float ua
+    cdef np.float32 iw, ih, box_area
+    cdef np.float32 ua
     cdef int pos = 0
-    cdef float maxscore = 0
+    cdef np.float32 maxscore = 0
     cdef int maxpos = 0
-    cdef float x1, x2, y1, y2, tx1, tx2, ty1, ty2, ts, area, weight, ov
+    cdef np.float32 x1, x2, y1, y2, tx1, tx2, ty1, ty2, ts, area, weight, ov
     inds = np.arange(N)
 
     for i in range(N):
